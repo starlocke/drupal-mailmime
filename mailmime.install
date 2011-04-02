@@ -1,0 +1,80 @@
+<?php
+
+function mailmime_requirements($phase) {
+  $failures = array();
+  $pear = drupal_realpath('public://PEAR');
+  $t = get_t();
+  if (!file_prepare_directory($pear, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
+    $failures[] = $t('Could not create directory %pear', array('%pear' => $pear));
+  }
+  else {
+    $repository = 'http://svn.php.net/repository/pear/';
+    $packages = array(
+      'Mail_mime' => array(
+        'local_path' => 'Mail/',
+        'remote_path' => 'packages/Mail_Mime/trunk/',
+        'files' => array(
+          'mime.php',
+          'mimeDecode.php',
+          'mimePart.php',
+          'package.xml',
+          'xmail.dtd',
+          'xmail.xsl',
+        ),
+      ),
+      'PEAR' => array(
+        'local_path' => '',
+        'remote_path' => 'pear-core/trunk/',
+        'files' => array(
+          'PEAR.php',
+        ),
+      ),
+    );
+    set_include_path(
+      implode(PATH_SEPARATOR,
+        array_unique(
+          array_merge(
+            array($pear),
+            explode(PATH_SEPARATOR, get_include_path()),
+          )
+        )
+      )
+    );
+    foreach ($packages as $name => $package) {
+      $local = $package['local_path'];
+      $remote = $package['remote_path'];
+      foreach ($package['files'] as $file) {
+        $include = "$local$file";
+        if (!file($include, FILE_USE_INCLUDE_PATH)) {
+          $url = "$repository$remote$file";
+          $filename = "$pear$include";
+          $param = array('%url' => $url, '%filename' => $filename);
+          if (!($data = drupal_http_request($url))) {
+            $failures[] = $t('Could not fetch %url.', $param);
+          }
+          elseif (!($file = fopen($filename, 'w'))) {
+            $failures[] = $t('Could not open %filename for writing.', $param);
+          }
+          else {
+            if (!fwrite($file, $data)) {
+              $failures[] = $t('Could not write to %filename.', $param);
+            }
+            if (!fclose($file)) {
+              $failures[] = $t('Could not close %filename.', $param);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (empty($failures)) {
+    return $failures;
+  }
+  return array(
+    'MailMIME' => array(
+      'title' => $t('Automatic PEAR Mail_Mime package installation'),
+      'description' => implode('<br />', $failures),
+      'severity' => REQUIREMENT_ERROR,
+    ),
+  );
+}

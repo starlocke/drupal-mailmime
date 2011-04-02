@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Implements hook_boot() to add the local PEAR repository to the include path.
+ */
+function mailmime_boot() {
+  set_include_path(
+    implode(PATH_SEPARATOR,
+      array_unique(
+        array_merge(
+          array(drupal_realpath('public://PEAR')),
+          explode(PATH_SEPARATOR, get_include_path()),
+        )
+      )
+    )
+  );
+}

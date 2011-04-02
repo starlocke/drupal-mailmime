@@ -1,0 +1,7 @@
+package = Mail
+name = Mail MIME
+description = "Provides a class for creating MIME messages."
+core = 7.x
+php = 5.0
+files[] = mailmime.inc
+
