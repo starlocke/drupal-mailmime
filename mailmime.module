@@ -8,7 +8,7 @@ function mailmime_init() {
     implode(PATH_SEPARATOR,
       array_unique(
         array_merge(
-          array(drupal_realpath(file_build_uri('PEAR')),
+          array(drupal_realpath(file_build_uri('PEAR'))),
           explode(PATH_SEPARATOR, get_include_path())
         )
       )
