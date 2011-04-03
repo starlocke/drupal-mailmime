@@ -34,7 +34,7 @@ class MailMIME extends Mail_mime {
    *
    * @var array
    */
-  protected var $cids = array();
+  protected $cids = array();
 
   /**
    * Holds parameters used for building the formatted message.
@@ -66,7 +66,7 @@ class MailMIME extends Mail_mime {
    *   - delay_file_io: FALSE if attached files should be read immediately,
    *     rather than when the message is built.  Defaults to TRUE.
    */
-  protected var $_build_params = array(
+  public $_build_params = array(
     'head_encoding' => 'quoted-printable',
     'text_encoding' => 'quoted-printable',
     'html_encoding' => 'quoted-printable',
@@ -367,7 +367,7 @@ class MailMIME extends Mail_mime {
   protected function attachRegex($matches) {
     if ( !url_is_external($url = $matches[4])
       && ($path = url_is_local($url))
-      && (file_exists($path)) ) {
+      && (file_exists($path))
       && ($this->addHTMLImage($path))
     ) {
       // The parent method will replace this with the actual cid: string.
@@ -763,4 +763,5 @@ class MailMIME extends Mail_mime {
     }
     $output .= MAIL_MIME_CRLF . MailMIME::concat($body);
     return $output;
+  }
 }
