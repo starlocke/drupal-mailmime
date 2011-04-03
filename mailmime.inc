@@ -12,6 +12,11 @@ define('MAIL_MIME_CRLF', variable_get('mail_line_endings', MAIL_LINE_ENDINGS));
 require_once 'Mail/mime.php';
 require_once 'Mail/mimeDecode.php';
 
+// @see http://drupal.org/node/1113588
+if (!function_exists('url_is_local')) {
+  require_once dirname(__FILE__) . '/url_is_local.inc';
+}
+
 /**
  * The MailMIME class is used to create MIME email messages.
  *
@@ -68,8 +73,8 @@ class MailMIME extends Mail_mime {
    */
   public $_build_params = array(
     'head_encoding' => 'quoted-printable',
-    'text_encoding' => 'quoted-printable',
-    'html_encoding' => 'quoted-printable',
+    'text_encoding' => '8bit',
+    'html_encoding' => '8bit',
     'html_charset' => 'UTF-8',
     'text_charset' => 'UTF-8',
     'head_charset' => 'UTF-8',
@@ -88,10 +93,10 @@ class MailMIME extends Mail_mime {
    * @return
    *   FALSE if $data is a PEAR_Error object; otherwise $data.
    */
-  protected static function successful($data) {
+  protected static function &successful(&$data) {
     if (PEAR::isError($data)) {
       watchdog('mailmime', $data->toString());
-      return FALSE;
+      $data = false;
     }
     return $data;
   }
@@ -568,7 +573,10 @@ class MailMIME extends Mail_mime {
    *
    * @see http://www.apps.ietf.org/rfc/rfc2047.html
    */
-  // public function encodeHeader($name, $value, $charset, $encoding);
+  public function encodeHeader($name, $value,
+    $charset = 'UTF-8', $encoding = 'quoted-printable') {
+    return parent::encodeHeader($name, $value, $charset, $encoding);
+  }
 
   /**
    * Parse a complete message and return a MailMIME object.
@@ -580,9 +588,9 @@ class MailMIME extends Mail_mime {
    *   FALSE if an error occured; otherwise a new MailMIME object containing
    *   the parsed message and its attachments, if any.
    */
-  public static function parse($message) {
+  public static function &parse($message) {
     $decoder = new Mail_mimeDecode($message);
-    $structure = $decoder->decode(
+    $decoded = $decoder->decode(
       array(
         'decode_headers' => TRUE,
         'decode_bodies' => TRUE,
@@ -595,6 +603,7 @@ class MailMIME extends Mail_mime {
     }
     $parsed = new MailMIME();
     MailMIME::parseDecoded($parsed, $decoded);
+    return $parsed;
   }
 
   /**
@@ -757,8 +766,8 @@ class MailMIME extends Mail_mime {
     $headers = MailMIME::toHeaders($headers);
     $output = '';
     foreach ($headers as $name => $value) {
-      $output .= $name . ': ' . MailMIME::encodeHeader(
-        $name, $value, 'UTF-8', 'quoted-printable'
+      $output .= $name . ': ' . Mail_mimePart::encodeHeader(
+        $name, $value, 'UTF-8', 'quoted-printable', MAIL_MIME_CRLF
       ) . MAIL_MIME_CRLF;
     }
     $output .= MAIL_MIME_CRLF . MailMIME::concat($body);

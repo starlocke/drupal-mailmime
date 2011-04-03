@@ -2,10 +2,12 @@
 
 function mailmime_requirements($phase) {
   $failures = array();
-  $pear = drupal_realpath('public://PEAR');
+  $pear = drupal_realpath(file_build_uri('PEAR'));
   $t = get_t();
-  if (!file_prepare_directory($pear, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
-    $failures[] = $t('Could not create directory %pear', array('%pear' => $pear));
+  if (!file_prepare_directory($pear,
+      FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
+    $failures[] = $t(
+      'Could not create directory %pear', array('%pear' => $pear));
   }
   else {
     $repository = 'http://svn.php.net/repository/pear/';
@@ -35,34 +37,48 @@ function mailmime_requirements($phase) {
         array_unique(
           array_merge(
             array($pear),
-            explode(PATH_SEPARATOR, get_include_path()),
+            explode(PATH_SEPARATOR, get_include_path())
           )
         )
       )
     );
     foreach ($packages as $name => $package) {
       $local = $package['local_path'];
+      $packagedir = "$pear/$local";
+      if (!file_prepare_directory($packagedir,
+          FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
+        $failures[] = $t(
+          'Could not create directory %local',
+          array('%local' => $packagedir)
+        );
+        continue;
+      }
       $remote = $package['remote_path'];
       foreach ($package['files'] as $file) {
         $include = "$local$file";
-        if (!file($include, FILE_USE_INCLUDE_PATH)) {
-          $url = "$repository$remote$file";
-          $filename = "$pear$include";
-          $param = array('%url' => $url, '%filename' => $filename);
-          if (!($data = drupal_http_request($url))) {
-            $failures[] = $t('Could not fetch %url.', $param);
-          }
-          elseif (!($file = fopen($filename, 'w'))) {
-            $failures[] = $t('Could not open %filename for writing.', $param);
-          }
-          else {
-            if (!fwrite($file, $data)) {
-              $failures[] = $t('Could not write to %filename.', $param);
-            }
-            if (!fclose($file)) {
-              $failures[] = $t('Could not close %filename.', $param);
-            }
-          }
+        if ($fd = @fopen($include, 'r', TRUE)) {
+          fclose($fd);
+          continue;
+        }
+        $url = "$repository$remote$file";
+        $filename = "$pear/$include";
+        if (!($response = drupal_http_request($url))) {
+          $failures[] = $t(
+            'Could not fetch %url.',
+            array('url' => $url)
+          );
+        }
+        elseif (!($count = strlen($response->data))) {
+          $failures[] = $t(
+            '%url returned zero-length file',
+            array('%url' => $url)
+          );
+        }
+        elseif ($count != file_put_contents($filename, $response->data)) {
+          $failures[] = $t(
+            'Could not write %count bytes to %filename.',
+            array('%count' => $count, '%filename' => $filename)
+          );
         }
       }
     }
