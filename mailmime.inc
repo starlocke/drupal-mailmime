@@ -8,13 +8,19 @@
 // The Mail_mime line-ending constant.
 define('MAIL_MIME_CRLF', variable_get('mail_line_endings', MAIL_LINE_ENDINGS));
 
-// @see mailmime_boot()
+/**
+ * The PEAR folder of the local files directory has been added to the include
+ * path by mailmime_init(), and the requisite files have been downloaded by
+ * mailmime_requirements(), so the following require_once commands should
+ * succeed.
+ *
+ * @see mailmime_init(), mailmime_requirements()
+ */
 require_once 'Mail/mime.php';
 require_once 'Mail/mimeDecode.php';
 
-// @see http://drupal.org/node/1113588
-if (!function_exists('url_is_local')) {
-  require_once dirname(__FILE__) . '/url_is_local.inc';
+if (!function_exists('url_to_path')) {
+  require_once dirname(__FILE__) . '/url_to_path.inc';
 }
 
 /**
@@ -96,7 +102,7 @@ class MailMIME extends Mail_mime {
   protected static function &successful(&$data) {
     if (PEAR::isError($data)) {
       watchdog('mailmime', $data->toString());
-      $data = false;
+      $data = FALSE;
     }
     return $data;
   }
@@ -140,7 +146,7 @@ class MailMIME extends Mail_mime {
    * @param $value
    *   The parameter value.
    *
-   * @see MailMIME::__construct()
+   * @see __construct()
    */
   // public function setParam($name, $value);
 
@@ -292,7 +298,7 @@ class MailMIME extends Mail_mime {
     $content_type = 'application/octet-stream', $name = '', $is_file = TRUE,
     $encoding = 'base64', $disposition = 'attachment', $charset = '',
     $language = '', $location = '', $name_encoding = NULL,
-    $filename_encoding = NULL, $description = '', $header_encoding = NULL){
+    $filename_encoding = NULL, $description = '', $header_encoding = NULL) {
     // @todo Set content_type with mimedetect if possible.
     return MailMIME::successful(
       parent::addAttachment($file, $content_type, $name, $is_file, $encoding,
@@ -367,11 +373,11 @@ class MailMIME extends Mail_mime {
   /**
    * A preg_replace_callback used to attach local files, if possible.
    *
-   * @see MailMIME::get()
+   * @see get()
    */
   protected function attachRegex($matches) {
     if ( !url_is_external($url = $matches[4])
-      && ($path = url_is_local($url))
+      && ($path = url_to_path($url))
       && (file_exists($path))
       && ($this->addHTMLImage($path))
     ) {
@@ -478,8 +484,7 @@ class MailMIME extends Mail_mime {
    * @param $params
    *   An associative array of ('name' => 'value') parameters to be added.
    *
-   * @see http://www.apps.ietf.org/rfc/rfc2046.html#sec-5.1
-   * @see http://www.apps.ietf.org/rfc/rfc1892.html
+   * @see http://www.apps.ietf.org/rfc/rfc2046.html, http://www.apps.ietf.org/rfc/rfc1892.html
    */
   // public function setContentType($type, $params = array());
 
@@ -648,7 +653,7 @@ class MailMIME extends Mail_mime {
     $parent_subtype = '') {
     if ($decoded->ctype_primary == 'multipart') {
       if (!empty($decoded->parts)) {
-        foreach(array_keys($decoded->parts) as $key) {
+        foreach (array_keys($decoded->parts) as $key) {
           parseDecoded($parsed, $decoded->parts[$key], $decoded->ctype_secondary);
         }
       }

@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Provide a url_to_path() function by refactoring and repurposing conf_path().
+ *
+ * @see http://drupal.org/node/1113588
+ */
 
 /**
  * Find the appropriate configuration directory for a given host and path.
@@ -11,11 +17,11 @@
  *   The part of the url following the hostname, including the leading slash.
  *
  * @return
- *   The path of the matching directory.
+ *   The path of the matching configuration directory.
  *
  * @see conf_path()
  */
-function _conf_path($http_host, $script_name, $require_settings = TRUE) {
+function find_conf_path($http_host, $script_name, $require_settings = TRUE) {
   $confdir = 'sites';
 
   $sites = array();
@@ -43,10 +49,10 @@ function _conf_path($http_host, $script_name, $require_settings = TRUE) {
 }
 
 /**
- * Determines whether a given URL could be local to the current Drupal site.
+ * Returns a local path corresponding to a given URL, if possible.
  *
  * Finds the configuration directory matching the given URL, and compares it
- * to the current configuration directory.  Returns a relative URL path if they
+ * to the current configuration directory. Returns a local file path if they
  * match, and FALSE if they don't.
  *
  * In a properly-configured multisite installation, this function helps answer
@@ -59,36 +65,40 @@ function _conf_path($http_host, $script_name, $require_settings = TRUE) {
  * possible conversion to inline attachments, the following code might be used:
  * @code
  *   if ( !url_is_external($url)
- *     && ($path = url_is_local($url))
+ *     && ($path = url_to_path($url))
  *     && file_exists($path) ) {
  *     // Attach $path and replace $url.
  *     ...
  *   }
  * @endcode
  *
- * @param $path
+ * @param $url
  *   The internal path or external URL being linked to, such as "node/34" or
  *   "http://example.com/foo".
  * @return
- *   A relative path, or FALSE.
+ *   FALSE if the host/port of $url does not match the current site, or else
+ *   a local path such as "/path/to/drupal/node/34" or "/path/to/drupal/foo".
  *
  * @see conf_path()
  */
-function url_is_local($path) {
-  $local = &drupal_static(__FUNCTION__, '');
+function url_to_path($url) {
+  $local = &drupal_static(__FUNCTION__, array());
 
-  $url = drupal_parse_url($path);
-  $http_host = isset($url[PHP_URL_HOST])
-    ? $url[PHP_URL_HOST] : $_SERVER['HTTP_HOST'];
-  if (isset($url[PHP_URL_PORT])) {
-    $http_host .= ':' . $url[PHP_URL_PORT];
+  $parts = parse_url($url);
+  $http_host = isset($parts['host'])
+    ? $parts['host'] : $_SERVER['HTTP_HOST'];
+  if (isset($parts['port'])) {
+    $http_host .= ':' . $parts['port'];
   }
-  $script_name = isset($url[PHP_URL_PATH])
-    ? $url[PHP_URL_PATH] : '';
+  $script_name = isset($parts['path'])
+    ? $parts['path'] : '/';
   $path = $http_host . $script_name;
 
   if (!isset($local[$path])) {
-    $local[$path] = (conf_path() == _conf_path($http_host, $script_name));
+    $local[$path] = (
+      conf_path() === find_conf_path($http_host, $script_name)
+    );
   }
-  return $local[$path] ? $script_name : FALSE;
+  return $local[$path]
+    ? realpath('.' . $script_name) : FALSE;
 }

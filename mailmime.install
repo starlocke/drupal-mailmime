@@ -1,5 +1,22 @@
 <?php
 
+/**
+ * @file
+ * Ensures certain PEAR modules are available by downloading them if necessary.
+ */
+
+/**
+ * Implements hook_requirements().
+ *
+ * Creates a PEAR directory to hold downloaded PEAR modules.
+ *
+ * Adds the PEAR directory to the front of the include path.
+ *
+ * Ensures the availability of requisite PEAR module files by downloading
+ * them to the local PEAR directory if necessary.
+ *
+ * Returns an appropriate error message if any of the above failed.
+ */
 function mailmime_requirements($phase) {
   $failures = array();
   $pear = drupal_realpath(file_build_uri('PEAR'));
@@ -62,7 +79,9 @@ function mailmime_requirements($phase) {
         }
         $url = "$repository$remote$file";
         $filename = "$pear/$include";
-        if (!($response = drupal_http_request($url))) {
+        if ( !($response = drupal_http_request($url))
+          || !isset($response->data)
+        ) {
           $failures[] = $t(
             'Could not fetch %url.',
             array('url' => $url)
