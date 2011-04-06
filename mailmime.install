@@ -18,39 +18,19 @@
  * Returns an appropriate error message if any of the above failed.
  */
 function mailmime_requirements($phase) {
-  $failures = array();
+  $errors = array();
+  $warnings = array();
   $pear = drupal_realpath(file_build_uri('PEAR'));
   $t = get_t();
   if (!file_prepare_directory($pear,
       FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)
   ) {
-    $failures[] = $t(
+    $warnings[] = $t(
       'Could not create directory %pear', array('%pear' => $pear)
     );
+    $pear = NULL;
   }
   else {
-    $repository = 'http://svn.php.net/repository/pear/';
-    $packages = array(
-      'Mail_mime' => array(
-        'local_path' => 'Mail/',
-        'remote_path' => 'packages/Mail_Mime/trunk/',
-        'files' => array(
-          'mime.php',
-          'mimeDecode.php',
-          'mimePart.php',
-          'package.xml',
-          'xmail.dtd',
-          'xmail.xsl',
-        ),
-      ),
-      'PEAR' => array(
-        'local_path' => '',
-        'remote_path' => 'pear-core/trunk/',
-        'files' => array(
-          'PEAR.php',
-        ),
-      ),
-    );
     set_include_path(
       implode(PATH_SEPARATOR,
         array_unique(
@@ -61,57 +41,119 @@ function mailmime_requirements($phase) {
         )
       )
     );
-    foreach ($packages as $name => $package) {
-      $local = $package['local_path'];
+  }
+  $repository = 'http://svn.php.net/repository/pear/';
+  foreach ($packages as $name => $package) {
+    $local = $package['local_path'];
+    if ($pear) {
       $packagedir = "$pear/$local";
       if (!file_prepare_directory($packagedir,
-          FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
-        $failures[] = $t(
+        FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
+        $warnings[] = $t(
           'Could not create directory %local',
           array('%local' => $packagedir)
         );
         continue;
       }
       $remote = $package['remote_path'];
-      foreach ($package['files'] as $file) {
-        $include = "$local$file";
-        if ($fd = @fopen($include, 'r', TRUE)) {
-          fclose($fd);
-          continue;
-        }
+    }
+    foreach ($package['files'] as $file) {
+      $include = "$local$file";
+      // This searches the include_path for $include.
+      if ($fd = @fopen($include, 'r', TRUE)) {
+        fclose($fd);
+        continue;
+      }
+      if ($pear) {
         $url = "$repository$remote$file";
         $filename = "$pear/$include";
         if ( !($response = drupal_http_request($url))
           || !isset($response->data)
         ) {
-          $failures[] = $t(
-            'Could not fetch %url.',
+          $errors[] = $t(
+            'Could not open %url.',
             array('%url' => $url)
           );
         }
         elseif (!($count = strlen($response->data))) {
-          $failures[] = $t(
-            '%url returned zero-length file',
+          $errors[] = $t(
+            '%url returned zero bytes.',
             array('%url' => $url)
           );
         }
         elseif ($count != file_put_contents($filename, $response->data)) {
-          $failures[] = $t(
+          $errors[] = $t(
             'Could not write %count bytes to %filename.',
             array('%count' => $count, '%filename' => $filename)
           );
         }
+        elseif ($fd = @fopen($include, 'r', TRUE)) {
+          fclose($fd);
+          continue;
+        }
+        $errors[] = $t(
+          'Installed but could not load %package file %include. '
+          . 'Add %pear to your %include_path.'
+          array(
+            '%package' => "PEAR::$name",
+            '%include' => $include,
+            '%pear' => $pear,
+            '%include_path' => 'include_path',
+          )
+        );
+      }
+      else {
+        $errors[] = $t(
+          'Could not find or download %package file %include.'
+          array('%include' => $include, '%package' => "PEAR::$name")
+        );
       }
     }
   }
-  if (empty($failures)) {
-    return $failures;
+  if (empty($errors) && empty($warnings)) {
+    return array();
   }
   return array(
     'MailMIME' => array(
       'title' => $t('Automatic PEAR Mail_Mime package installation'),
-      'description' => implode('<br />', $failures),
-      'severity' => REQUIREMENT_ERROR,
+      'description' => implode('<br />', $warnings + $errors),
+      'severity' => empty($errors) ? REQUIREMENT_WARNING : REQUIREMENT_ERROR,
+    ),
+  );
+}
+
+/**
+ * Return an array of required PEAR packages and files.
+ *
+ * @return
+ *   An array of package items keyed by package name.  Each package item is
+ *   an associative array with the following keys:
+ *   - local_path: The path relative to the local PEAR repository where the
+ *     package files are (to be) installed.
+ *   - remote_path: The url path relative to the remote PEAR repository root
+ *     where the package source files may be downloaded.
+ *   - files: An array of filenames to be read and/or downloaded.
+ */
+function mailmime_required_PEAR_packages() {
+  return array(
+    'Mail_mime' => array(
+      'local_path' => 'Mail/',
+      'remote_path' => 'packages/Mail_Mime/trunk/',
+      'files' => array(
+        'mime.php',
+        'mimeDecode.php',
+        'mimePart.php',
+        'package.xml',
+        'xmail.dtd',
+        'xmail.xsl',
+      ),
+    ),
+    'PEAR' => array(
+      'local_path' => '',
+      'remote_path' => 'pear-core/trunk/',
+      'files' => array(
+        'PEAR.php',
+      ),
     ),
   );
 }
