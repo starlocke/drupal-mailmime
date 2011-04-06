@@ -86,7 +86,7 @@ function mailmime_requirements($phase) {
         ) {
           $failures[] = $t(
             'Could not fetch %url.',
-            array('url' => $url)
+            array('%url' => $url)
           );
         }
         elseif (!($count = strlen($response->data))) {
