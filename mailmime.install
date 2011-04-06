@@ -97,7 +97,7 @@ function mailmime_requirements($phase) {
         }
         $errors[] = $t(
           'Installed but could not load %package file %include. '
-          . 'Add %pear to your %include_path.'
+          . 'Add %pear to your %include_path.',
           array(
             '%package' => "PEAR::$name",
             '%include' => $include,
@@ -108,7 +108,7 @@ function mailmime_requirements($phase) {
       }
       else {
         $errors[] = $t(
-          'Could not find or download %package file %include.'
+          'Could not find or download %package file %include.',
           array('%include' => $include, '%package' => "PEAR::$name")
         );
       }
