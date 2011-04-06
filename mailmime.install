@@ -20,7 +20,7 @@
 function mailmime_requirements($phase) {
   $errors = array();
   $warnings = array();
-  $pear = drupal_realpath(file_build_uri('PEAR'));
+  $pear = realpath(file_build_uri('PEAR'));
   $t = get_t();
   if (!file_prepare_directory($pear,
       FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)
