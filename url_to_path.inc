@@ -49,23 +49,61 @@ function find_conf_path($http_host, $script_name, $require_settings = TRUE) {
 }
 
 /**
- * Returns a local path corresponding to a given URL, if possible.
+ * Returns the local relative path corresponding to a given URL, if possible.
  *
  * Finds the configuration directory matching the given URL, and compares it
- * to the current configuration directory. Returns a local file path if they
- * match, and FALSE if they don't.
+ * to the current configuration directory. Returns a path relative to the drupal
+ * install if they match, and FALSE if they don't.
  *
  * In a properly-configured multisite installation, this function helps answer
- * the question, "Could this URL match a file or path within my site?"
+ * the question, "Could a given URL match a file or path within my site?"
  *
  * Whether the URL does in fact resolve to this site, or at all, cannot be
  * determined within Drupal itself.  This is only a sanity check.
  *
- * For example, when looking for image URLs within an HTML mail body for
+ * @param $url
+ *   The internal path or external URL being linked to, such as
+ *   "drupal/node/34" or "http://example.com/drupal/foo".
+ * @return
+ *   FALSE if $url contains a host/port/path that does not match the current
+ *   site, or else a drupal path such as "node/34" or "foo".
+ *
+ * @see conf_path(), find_conf_path()
+ */
+function url_to_path($url) {
+  global $base_path;
+  $local = &drupal_static('__FUNCTION__', array());
+  $base_len = strlen($base_path);
+
+  $parts = parse_url($url);
+  $http_host = isset($parts['host'])
+    ? $parts['host'] : $_SERVER['HTTP_HOST'];
+  if (isset($parts['port'])) {
+    $http_host .= ':' . $parts['port'];
+  }
+  $script_name = '/';
+  if (isset($parts['path'])) {
+    $script_name .= ltrim($parts['path'], '/');
+  }
+  $path = $http_host . $script_name;
+  if (!isset($local[$path])) {
+    $local[$path] = (
+      conf_path() == find_conf_path($http_host, $script_name)
+      && !strncmp($script_name, $base_path, $base_len)
+    );
+  }
+  return $local[$path]
+    ? substr($script_name, $base_len) : FALSE;
+}
+
+/**
+ * Returns an absolute local path corresponding to a given URL, if possible.
+ *
+ * For example, when looking for image URLs within an email message body for
  * possible conversion to inline attachments, the following code might be used:
  * @code
  *   if ( !url_is_external($url)
- *     && ($path = url_to_path($url))
+ *     && ($path = url_to_realpath($url))
  *     && file_exists($path) ) {
  *     // Attach $path and replace $url.
  *     ...
@@ -74,31 +112,17 @@ function find_conf_path($http_host, $script_name, $require_settings = TRUE) {
  *
  * @param $url
  *   The internal path or external URL being linked to, such as "node/34" or
- *   "http://example.com/foo".
+ *   "http://example.com/drupal/foo".
  * @return
- *   FALSE if the host/port of $url does not match the current site, or else
- *   a local path such as "/path/to/drupal/node/34" or "/path/to/drupal/foo".
+ *   FALSE if $url contains a host/port/path that does not match the current
+ *   site, or else an absolute local path such as "/path/to/drupal/node/34".
  *
- * @see conf_path()
+ * @see url_to_path()
  */
-function url_to_path($url) {
-  $local = &drupal_static(__FUNCTION__, array());
-
-  $parts = parse_url($url);
-  $http_host = isset($parts['host'])
-    ? $parts['host'] : $_SERVER['HTTP_HOST'];
-  if (isset($parts['port'])) {
-    $http_host .= ':' . $parts['port'];
+function url_to_realpath($url) {
+  $path = url_to_path($url);
+  if ($path) {
+    return realpath(DRUPAL_ROOT . base_path() . $path);
   }
-  $script_name = isset($parts['path'])
-    ? $parts['path'] : '/';
-  $path = $http_host . $script_name;
-
-  if (!isset($local[$path])) {
-    $local[$path] = (
-      conf_path() === find_conf_path($http_host, $script_name)
-    );
-  }
-  return $local[$path]
-    ? realpath('.' . $script_name) : FALSE;
+  return FALSE;
 }

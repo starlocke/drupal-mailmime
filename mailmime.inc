@@ -377,7 +377,7 @@ class MailMIME extends Mail_mime {
    */
   protected function attachRegex($matches) {
     if ( !url_is_external($url = $matches[4])
-      && ($path = url_to_path($url))
+      && ($path = url_to_realpath($url))
       && (file_exists($path))
       && ($this->addHTMLImage($path))
     ) {
@@ -484,7 +484,8 @@ class MailMIME extends Mail_mime {
    * @param $params
    *   An associative array of ('name' => 'value') parameters to be added.
    *
-   * @see http://www.apps.ietf.org/rfc/rfc2046.html, http://www.apps.ietf.org/rfc/rfc1892.html
+   * @see http://www.apps.ietf.org/rfc/rfc2046.html
+   * @see http://www.apps.ietf.org/rfc/rfc1892.html
    */
   // public function setContentType($type, $params = array());
 
