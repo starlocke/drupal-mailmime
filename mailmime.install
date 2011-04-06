@@ -43,12 +43,16 @@ function mailmime_requirements($phase) {
     );
   }
   $repository = 'http://svn.php.net/repository/pear/';
+  $packages = mailmime_required_PEAR_packages();
   foreach ($packages as $name => $package) {
     $local = $package['local_path'];
     if ($pear) {
       $packagedir = "$pear/$local";
-      if (!file_prepare_directory($packagedir,
-        FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
+      if (
+        !file_prepare_directory($packagedir,
+          FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS
+        )
+      ) {
         $warnings[] = $t(
           'Could not create directory %local',
           array('%local' => $packagedir)
