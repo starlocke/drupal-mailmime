@@ -376,10 +376,10 @@ class MailMIME extends Mail_mime {
    * @see get()
    */
   protected function attachRegex($matches) {
-    if ( !url_is_external($url = $matches[4])
+    if ( ($url = drupal_strip_dangerous_protocols($matches[4]))
       && ($path = url_to_realpath($url))
-      && (file_exists($path))
-      && ($this->addHTMLImage($path))
+      && file_exists($path)
+      && $this->addHTMLImage($path)
     ) {
       // The parent method will replace this with the actual cid: string.
       $matches[4] = $path;
@@ -412,10 +412,8 @@ class MailMIME extends Mail_mime {
     if (isset($this->_htmlbody)) {
       $this->_htmlbody = preg_replace_callback(
         array(
-          '#(?<!\S)(src|background|href)\s*(=)\s*(["\'])(?!cid:)(.*?)(\3)#i',
-          '#(?<!\S)(src|background|href)\s*(=)(\s*)(?!"cid:)([^ >]*)(?=[ >])#i',
-          '#(?<!\S)(url)\s*(\()\s*(["\'])(?!cid:)(.*?)(\3)#i',
-          '#(?<!\S)(url)\s*(\()(\s*)(?!"cid:)([^ )]*)(?=[ )])#i',
+          '#(?<!\S)(src|background|href)\s*(=)\s*(["\'])(?!cid:)(.*?)(\3)(?=[ >])#i',
+          '#(?<!\S)(url)\s*(\()\s*(["\'])(?!cid:)(.*?)(\3)(?=[ )])#i',
         ),
         array(&$this, 'attachRegex'),
         $this->_htmlbody
