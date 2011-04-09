@@ -34,9 +34,6 @@ function mailmime_init() {
         'mime.php',
         'mimeDecode.php',
         'mimePart.php',
-        'package.xml',
-        'xmail.dtd',
-        'xmail.xsl',
       ),
     ),
     'PEAR' => array(
@@ -51,7 +48,6 @@ function mailmime_init() {
     $dst = $package['local_path'];
     $src = $package['remote_path'];
     foreach ($package['files'] as $file) {
-      $include = "$local$file";
       if (!include_check_path("$dst$file", "$svn$src$file", 'url')){
         module_disable(array('mailmime'));
         watchdog(
