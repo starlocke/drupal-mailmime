@@ -1,17 +1,79 @@
 <?php
 
 /**
- * Implements hook_init() to add the local PEAR repository to the include path.
+ * Implements hook_init().
+ *
+ * Ensures that required PEAR modules are available, or else disables the
+ * Mail MIME module to avoid conflicts.
  */
 function mailmime_init() {
-  set_include_path(
-    implode(PATH_SEPARATOR,
-      array_unique(
-        array_merge(
-          array(drupal_realpath(file_build_uri('PEAR'))),
-          explode(PATH_SEPARATOR, get_include_path())
+  // This only needs to succeed once.
+  if (cache_get('mailmime_installed', 'cache_bootstrap')) {
+    return;
+  }
+  // Guard against those who upgrade without reading the requirements.
+  if (!module_exists('include')) {
+    module_disable(array('mailmime'));
+    drupal_set_message(
+      t('Please install the required <a href="!include">Include</a> '
+        . 'module, then re-enable <a href="!mailmime">Mail MIME</a>',
+        array(
+          '!include' => url('http://drupal.org/project/include'),
+          '!mailmime' => url('http://drupal.org/project/mailmime'),
         )
       )
-    )
+    );
+    drupal_goto('admin/modules');
+  }
+  $svn = 'http://svn.php.net/repository/pear/';
+  $packages = array(
+    'Mail_mime' => array(
+      'local_path' => 'Mail/',
+      'remote_path' => 'packages/Mail_Mime/trunk/',
+      'files' => array(
+        'mime.php',
+        'mimeDecode.php',
+        'mimePart.php',
+        'package.xml',
+        'xmail.dtd',
+        'xmail.xsl',
+      ),
+    ),
+    'PEAR' => array(
+      'local_path' => '',
+      'remote_path' => 'pear-core/trunk/',
+      'files' => array(
+        'PEAR.php',
+      ),
+    ),
   );
+  foreach ($packages as $name => $package) {
+    $dst = $package['local_path'];
+    $src = $package['remote_path'];
+    foreach ($package['files'] as $file) {
+      $include = "$local$file";
+      if (!include_check_path("$dst$file", "$svn$src$file", 'url')){
+        module_disable(array('mailmime'));
+        watchdog(
+          'mailmime',
+          'The required files from the <a href="!pear">PEAR <a href="!pear"> '
+          . '<a href="!package">Mail_Mime</a> package could not be found. '
+          . 'An attempt to automatically download and install the required '
+          . 'files has also failed.  The <a href="!module">Mail MIME</a> '
+          . 'module has been disabled to avoid further errors. Please download '
+          . 'and install the <a href="!package">Mail_Mime</a> package, then '
+          . 'visit your <a href="!modules">Modules</a> page to re-enable the '
+          . '<a href="!module">Mail MIME</a> module.',
+          array(
+            '!pear' => url('http://pear.php.net'),
+            '!package' => url('http://pear.php.net/package/Mail_Mime'),
+            '!module' => url('http://drupal.org/project/mailmime'),
+            '!modules' => url('admin/modules'),
+          ),
+          WATCHDOG_EMERGENCY
+        );
+      }
+    }
+  }
+  cache_set('mailmime_installed', TRUE, 'cache_bootstrap');
 }
