@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * @file
+ * Ensures that required files are available.
+ */
+
+/**
+
+/**
  * Implements hook_init().
  *
  * Ensures that required PEAR modules are available, or else disables the
