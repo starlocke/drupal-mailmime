@@ -26,7 +26,8 @@ function mailmime_init() {
           '!include' => url('http://drupal.org/project/include'),
           '!mailmime' => url('http://drupal.org/project/mailmime'),
         )
-      )
+      ),
+      'error'
     );
     drupal_goto('admin/modules');
   }
