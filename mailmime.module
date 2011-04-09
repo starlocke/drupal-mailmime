@@ -70,7 +70,7 @@ function mailmime_init() {
           '!module' => url('http://drupal.org/project/mailmime'),
           '!modules' => url('admin/modules'),
         );
-        watchdog($message, $args, WATCHDOG_EMERGENCY);
+        watchdog('mailmime', $message, $args, WATCHDOG_EMERGENCY);
         drupal_set_message(t($message, $args), 'error');
         return;
       }
