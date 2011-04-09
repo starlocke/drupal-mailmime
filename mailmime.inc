@@ -378,7 +378,7 @@ class MailMIME extends Mail_mime {
   protected function attachRegex($matches) {
     if ( ($url = drupal_strip_dangerous_protocols($matches[4]))
       && ($path = url_to_realpath($url))
-      && file_exists($path)
+      && is_file($path)
       && $this->addHTMLImage($path)
     ) {
       // The parent method will replace this with the actual cid: string.

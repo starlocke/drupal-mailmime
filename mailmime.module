@@ -55,7 +55,7 @@ function mailmime_init() {
     $dst = $package['local_path'];
     $src = $package['remote_path'];
     foreach ($package['files'] as $file) {
-      if (!include_check_path("$dst$file", "$svn$src$file", 'url')){
+      if (!include_check_path("$dst$file", "$svn$src$file", 'url')) {
         module_disable(array('mailmime'));
         $message = 'The required files from the <a href="!pear">PEAR</a> '
           . '<a href="!package">Mail_Mime</a> package could not be found. '
