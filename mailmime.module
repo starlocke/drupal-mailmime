@@ -47,6 +47,7 @@ function mailmime_init() {
       'remote_path' => 'pear-core/trunk/',
       'files' => array(
         'PEAR.php',
+        'PEAR5.php',
       ),
     ),
   );
