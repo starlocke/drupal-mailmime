@@ -16,21 +16,70 @@ function mailmime_init() {
   if (cache_get('mailmime_installed', 'cache_bootstrap')) {
     return;
   }
-  // Guard against those who upgrade without reading the requirements.
-  if (!module_exists('include')) {
-    module_disable(array('mailmime'));
-    drupal_set_message(
-      t('Please install the required <a href="!include">Include</a> '
-        . 'module, then re-enable <a href="!mailmime">Mail MIME</a>',
-        array(
-          '!include' => url('http://drupal.org/project/include'),
-          '!mailmime' => url('http://drupal.org/project/mailmime'),
-        )
-      ),
-      'error'
-    );
-    drupal_goto('admin/modules');
+  if (mailmime_check_requirements()) {
+    cache_set('mailmime_installed', TRUE, 'cache_menu');
+    return;
   }
+  // Requirements check failed; disable module and issue an error message.
+  module_disable(array('mailmime'));
+  $args = array(
+    '!include' => url('http://drupal.org/project/include'),
+    '!include_path' => url('http://php.net/set_include_path'),
+    '!module' => url('http://drupal.org/project/mailmime'),
+    '!modules' => url('admin/build/modules'),
+    '!package' => url('http://pear.php.net/package/Mail_Mime'),
+    '!pear' => url('http://pear.php.net'),
+  );
+  $message = t(
+    'The required <a href="!pear">PEAR</a> <a href="!package">Mail_Mime</a> '
+    . 'package could not be found. ', $args
+  ) . (
+    module_exists('include') ? t(
+      'The <a href="!include">Include</a> module tried to automatically '
+      . 'download the required files, but that also failed.  Your hosting '
+      . 'provider may have disabled the '
+      . '<a href="!include_path"><code>set_include_path</code></a> '
+      . 'directive.'
+    ) : t(
+      'If installed, the <a href="!include">Include</a> module can attempt '
+      . 'to automatically download the required files for you.', $args
+    )
+  ) . t(
+    'The <a href="!module">Mail MIME</a> module has been disabled to avoid '
+    . 'further errors. Please download and install '
+    . '<a href="!package">Mail_Mime</a> from <a href="!pear">PEAR</a>, then '
+    . 'visit your <a href="!modules">Modules</a> page to re-enable the '
+    . '<a href="!module">Mail MIME</a> module.', $args
+  );
+  watchdog('mailmime', $message, NULL, WATCHDOG_EMERG);
+  drupal_set_message($message, 'error');
+}
+
+/**
+ * Checks whether required files exist.
+ */
+function mailmime_check_requirements() {
+  // Try including the files, then cleck for the classes.
+  @include_once('Mail/mime.php');
+  @include_once('Mail/mimeDecode.php');
+  @include_once('Mail/mimePart.php');
+  if ( class_exists('Mail_Mime')
+    && class_exists('Mail_mimeDecode')
+    && class_exists('Mail_mimePart')
+  ) {
+    return TRUE;
+  }
+  // One or more classes don't exist.  Try downloading them.
+  if (module_exists('include')) {
+    return mailmime_download_requirements();
+  }
+  return FALSE;
+}
+
+/**
+ * Attempts to use the Include module to download required files.
+ */
+function mailmime_download_requirements() {
   $svn = 'http://svn.php.net/repository/pear/';
   $packages = array(
     'Mail_mime' => array(
@@ -56,26 +105,9 @@ function mailmime_init() {
     $src = $package['remote_path'];
     foreach ($package['files'] as $file) {
       if (!include_check_path("$dst$file", "$svn$src$file", 'url')) {
-        module_disable(array('mailmime'));
-        $message = 'The required files from the <a href="!pear">PEAR</a> '
-          . '<a href="!package">Mail_Mime</a> package could not be found. '
-          . 'An attempt to automatically download and install the required '
-          . 'files has also failed.  The <a href="!module">Mail MIME</a> '
-          . 'module has been disabled to avoid further errors. Please download '
-          . 'and install the <a href="!package">Mail_Mime</a> package, then '
-          . 'visit your <a href="!modules">Modules</a> page to re-enable the '
-          . '<a href="!module">Mail MIME</a> module.';
-        $args = array(
-          '!pear' => url('http://pear.php.net'),
-          '!package' => url('http://pear.php.net/package/Mail_Mime'),
-          '!module' => url('http://drupal.org/project/mailmime'),
-          '!modules' => url('admin/modules'),
-        );
-        watchdog('mailmime', $message, $args, WATCHDOG_EMERGENCY);
-        drupal_set_message(t($message, $args), 'error');
-        return;
+        return FALSE;
       }
     }
   }
-  cache_set('mailmime_installed', TRUE, 'cache_bootstrap');
+  return TRUE;
 }
