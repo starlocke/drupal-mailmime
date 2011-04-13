@@ -4,10 +4,11 @@ Provides a class for creating MIME messages.
 
 *   *NOTE: This module does not send mail.*
 
-    If you came here looking for a mail-sending module, try
-    [HTML Mail](http://drupal.org/project/htmlmail) (which can use this module
-    for MIME-handling) or [Mime Mail](http://drupal.org/project/mimemail)
-    (which comes with its own MIME-handling library).
+    :   If you came here looking for a mail-sending module, try
+        [HTML Mail](http://drupal.org/project/htmlmail) (which can use this
+        module for MIME-handling) or
+        [Mime Mail](http://drupal.org/project/mimemail) (which comes with its
+        own MIME-handling library).
 
 [Mail Mime](http://drupal.org/project/mailmime) extends the
 [PEAR](http://pear.php.net/) class called

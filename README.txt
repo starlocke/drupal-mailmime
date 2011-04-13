@@ -1,10 +1,13 @@
                                   [1]Mail MIME
 
    Provides a class for creating MIME messages.
-     * NOTE: This module does not send mail.
-       If you came here looking for a mail-sending module, try [2]HTML
-       Mail (which can use this module for MIME-handling) or [3]Mime Mail
-       (which comes with its own MIME-handling library).
+     *
+
+        NOTE: This module does not send mail.
+                If you came here looking for a mail-sending module, try
+                [2]HTML Mail (which can use this module for MIME-handling)
+                or [3]Mime Mail (which comes with its own MIME-handling
+                library).
 
    [4]Mail Mime extends the [5]PEAR class called [6]Mail_Mime to provide a
    drupal-friendly library for creating and parsing MIME messages. Neither
