@@ -29,3 +29,36 @@ module for two reasons:
 
 2.  It is possible that another mail-sending or mail-reading module may find the
     [Mail Mime](http://drupal.org/project/mailmime) library useful.
+
+## [Requirement](http://www.dict.org/bin/Dict?Form=Dict2&Database=*&Query=requirement)
+
+Either:
+
+:   *   The [PEAR](http://pear.php.net/) package called
+        [Mail_Mime](http://pear.php.net/package/Mail_Mime) must be installed and
+        available somewhere on the include_path.
+
+:   --OR--
+
+:   *   If the [Mail_Mime](http://pear.php.net/package/Mail_Mime) is not
+        available, the [Include](http://drupal.org/project/include) module
+        can automatically download and enable the required files.
+
+## [Installation](http://drupal.org/documentation/install/modules-themes/modules-5-6)
+
+1.  Download and install
+    [as usual](http://drupal.org/documentation/install/modules-themes/modules-5-6).
+
+2.  When enabled, [Mail Mime](http://drupal.org/project/mailmime) will
+
+    *   Auto-detect whether the required files are present.
+
+    *   If any files are missing, and the
+        [Include](http://drupal.org/project/include) module is available,
+        [Mail Mime](http://drupal.org/project/mailmime) will use
+        [Include](http://drupal.org/project/include) to auto-download and
+        enable the missing files.
+
+    *   If all of the above fails,
+        [Mail Mime](http://drupal.org/project/mailmime) will disable itself
+        and print a warning to both the screen and the error log.
