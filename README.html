@@ -18,3 +18,40 @@
     <p>It is possible that another mail-sending or mail-reading module may find the <a href="http://drupal.org/project/mailmime">Mail Mime</a> library useful.</p>
   </li>
 </ol>
+<h2><a href="http://www.dict.org/bin/Dict?Form=Dict2&amp;Database=*&amp;Query=requirement">Requirement</a></h2>
+<dl>
+  <dt>Either:</dt>
+  <dd>
+    <ul>
+      <li>The <a href="http://pear.php.net/">PEAR</a> package called <a href="http://pear.php.net/package/Mail_Mime">Mail_Mime</a> must be installed and available somewhere on the include_path.</li>
+    </ul>
+  </dd>
+  <dd>
+    <p>--OR--</p>
+  </dd>
+  <dd>
+    <ul>
+      <li>If the <a href="http://pear.php.net/package/Mail_Mime">Mail_Mime</a> is not available, the <a href="http://drupal.org/project/include">Include</a> module can automatically download and enable the required files.</li>
+    </ul>
+  </dd>
+</dl>
+<h2><a href="http://drupal.org/documentation/install/modules-themes/modules-5-6">Installation</a></h2>
+<ol style="list-style-type: decimal;">
+  <li>
+    <p>Download and install <a href="http://drupal.org/documentation/install/modules-themes/modules-5-6">as usual</a>.</p>
+  </li>
+  <li>
+    <p>When enabled, <a href="http://drupal.org/project/mailmime">Mail Mime</a> will</p>
+    <ul>
+      <li>
+        <p>Auto-detect whether the required files are present.</p>
+      </li>
+      <li>
+        <p>If any files are missing, and the <a href="http://drupal.org/project/include">Include</a> module is available, <a href="http://drupal.org/project/mailmime">Mail Mime</a> will use <a href="http://drupal.org/project/include">Include</a> to auto-download and enable the missing files.</p>
+      </li>
+      <li>
+        <p>If all of the above fails, <a href="http://drupal.org/project/mailmime">Mail Mime</a> will disable itself and print a warning to both the screen and the error log.</p>
+      </li>
+    </ul>
+  </li>
+</ol>
