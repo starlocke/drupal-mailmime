@@ -39,7 +39,7 @@ Either:
         available somewhere on the
         [`include_path`](http://php.net/manual/ini.core.php#ini.include-path).
 
-:   --OR--
+Or:
 
 :   *   If the [Mail_Mime](http://pear.php.net/package/Mail_Mime) is not
         available, the [Include](http://drupal.org/project/include) module

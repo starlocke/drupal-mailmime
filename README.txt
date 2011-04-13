@@ -30,7 +30,7 @@
           + The [13]PEAR package called [14]Mail_Mime must be installed
             and available somewhere on the [15]include_path.
 
-          --OR--
+   Or:
 
           + If the [16]Mail_Mime is not available, the [17]Include module
             can automatically download and enable the required files.
