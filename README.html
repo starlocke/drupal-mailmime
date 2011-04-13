@@ -1,0 +1,18 @@
+<h1><a href="http://drupal.org/project/mailmime">Mail MIME</a></h1>
+<p>: Provides a class for creating MIME messages.</p>
+<ul>
+  <li>
+    <p><em>NOTE: This module does not send mail.</em></p>
+    <p>If you came here looking for a mail-sending module, try <a href="http://drupal.org/project/htmlmail">HTML Mail</a> (which can use this module for MIME-handling) or <a href="http://drupal.org/project/mimemail">Mime Mail</a> (which comes with its own MIME-handling library).</p>
+  </li>
+</ul>
+<p><a href="http://drupal.org/project/mailmime">Mail Mime</a> extends the <a href="http://pear.php.net/">PEAR</a> class called <a href="http://pear.php.net/package/Mail_Mime">Mail_Mime</a> to provide a drupal-friendly library for creating and parsing MIME messages. Neither <a href="http://drupal.org/project/mailmime">Mail Mime</a> nor <a href="http://pear.php.net/package/Mail_Mime">Mail_Mime</a> send mail nor do anything useful on their own. Both are intended as code libraries to be used by <em>other</em> programs that send or receive mail.</p>
+<p><a href="http://drupal.org/project/mailmime">Mail Mime</a> started out as part of <a href="http://drupal.org/project/htmlmai">HTML Mail</a>. I separated into its own module for two reasons:</p>
+<ol style="list-style-type: decimal;">
+  <li>
+    <p>The separation helped clarify in my own mind which parts of the mail-sending process required MIME and which did not. The resulting code is simpler and easier to maintain.</p>
+  </li>
+  <li>
+    <p>It is possible that another mail-sending or mail-reading module may find the <a href="http://drupal.org/project/mailmime">Mail Mime</a> library useful.</p>
+  </li>
+</ol>
