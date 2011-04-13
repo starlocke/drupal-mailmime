@@ -18,7 +18,7 @@
    [9]Mail Mime started out as part of [10]HTML Mail. I separated into its
    own module for two reasons:
     1. The separation helped clarify in my own mind which parts of the
-       mail-sending process required MIME and which did not. The resulting
+       mail-sending process require MIME and which do not. The resulting
        code is simpler and easier to maintain.
     2. It is possible that another mail-sending or mail-reading module may
        find the [11]Mail Mime library useful.

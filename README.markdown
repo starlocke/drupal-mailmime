@@ -24,7 +24,7 @@ programs that send or receive mail.
 module for two reasons:
 
 1.  The separation helped clarify in my own mind which parts of the mail-sending
-    process required MIME and which did not.  The resulting code is simpler and
+    process require MIME and which do not.  The resulting code is simpler and
     easier to maintain.
 
 2.  It is possible that another mail-sending or mail-reading module may find the
