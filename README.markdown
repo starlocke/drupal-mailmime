@@ -1,5 +1,6 @@
 # [Mail MIME](http://drupal.org/project/mailmime)
-:   Provides a class for creating MIME messages.
+
+Provides a class for creating MIME messages.
 
 *   *NOTE: This module does not send mail.*
 

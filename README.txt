@@ -1,6 +1,6 @@
                                   [1]Mail MIME
 
-   : Provides a class for creating MIME messages.
+   Provides a class for creating MIME messages.
      * NOTE: This module does not send mail.
        If you came here looking for a mail-sending module, try [2]HTML
        Mail (which can use this module for MIME-handling) or [3]Mime Mail
