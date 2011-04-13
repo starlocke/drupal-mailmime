@@ -28,22 +28,22 @@
    Either:
 
           + The [13]PEAR package called [14]Mail_Mime must be installed
-            and available somewhere on the include_path.
+            and available somewhere on the [15]include_path.
 
           --OR--
 
-          + If the [15]Mail_Mime is not available, the [16]Include module
+          + If the [16]Mail_Mime is not available, the [17]Include module
             can automatically download and enable the required files.
 
-[17]Installation
+[18]Installation
 
-    1. Download and install [18]as usual.
-    2. When enabled, [19]Mail Mime will
+    1. Download and install [19]as usual.
+    2. When enabled, [20]Mail Mime will
           + Auto-detect whether the required files are present.
-          + If any files are missing, and the [20]Include module is
-            available, [21]Mail Mime will use [22]Include to auto-download
+          + If any files are missing, and the [21]Include module is
+            available, [22]Mail Mime will use [23]Include to auto-download
             and enable the missing files.
-          + If all of the above fails, [23]Mail Mime will disable itself
+          + If all of the above fails, [24]Mail Mime will disable itself
             and print a warning to both the screen and the error log.
 
 References
@@ -62,12 +62,13 @@ References
   12. http://www.dict.org/bin/Dict?Form=Dict2&Database=*&Query=requirement
   13. http://pear.php.net/
   14. http://pear.php.net/package/Mail_Mime
-  15. http://pear.php.net/package/Mail_Mime
-  16. http://drupal.org/project/include
-  17. http://drupal.org/documentation/install/modules-themes/modules-5-6
+  15. http://php.net/manual/ini.core.php#ini.include-path
+  16. http://pear.php.net/package/Mail_Mime
+  17. http://drupal.org/project/include
   18. http://drupal.org/documentation/install/modules-themes/modules-5-6
-  19. http://drupal.org/project/mailmime
-  20. http://drupal.org/project/include
-  21. http://drupal.org/project/mailmime
-  22. http://drupal.org/project/include
-  23. http://drupal.org/project/mailmime
+  19. http://drupal.org/documentation/install/modules-themes/modules-5-6
+  20. http://drupal.org/project/mailmime
+  21. http://drupal.org/project/include
+  22. http://drupal.org/project/mailmime
+  23. http://drupal.org/project/include
+  24. http://drupal.org/project/mailmime
