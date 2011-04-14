@@ -36,10 +36,11 @@ function mailmime_init() {
   ) . '</p><p>' . (
     module_exists('include') ? t(
       'The <a href="!include">Include</a> module tried to automatically '
-      . 'download the required files, but that also failed.  Your hosting '
-      . 'provider may have disabled the '
+      . 'download the required files, but that also failed.  You may retry '
+      . 'the download by re-enabling the <a href="!module">Mail MIME</a> '
+      . 'module.  If your hosting provider has disabled the '
       . '<a href="!include_path"><code>set_include_path</code></a> '
-      . 'directive.'
+      . 'directive, the files must be manually installed.', $args
     ) : t(
       'If installed, the <a href="!include">Include</a> module can attempt '
       . 'to automatically download the required files for you.', $args
