@@ -101,7 +101,13 @@ class MailMIME extends Mail_mime {
    */
   protected static function &successful(&$data) {
     if (PEAR::isError($data)) {
-      watchdog('mailmime', $data->toString());
+      watchdog('mailmime',
+        '<a href="!pear_error">PEAR error: @error',
+        array(
+          '!pear_error' => url('http://pear.php.net/manual/core.pear.pear.iserror.php'),
+          '@error' => $data->toString()
+        )
+      );
       $data = FALSE;
     }
     return $data;

@@ -30,30 +30,26 @@ function mailmime_init() {
     '!package' => url('http://pear.php.net/package/Mail_Mime'),
     '!pear' => url('http://pear.php.net'),
   );
-  $message = '<p>' . t(
-    'The required <a href="!pear">PEAR</a> <a href="!package">Mail_Mime</a> '
-    . 'package could not be found. ', $args
-  ) . '</p><p>' . (
-    module_exists('include') ? t(
-      'The <a href="!include">Include</a> module tried to automatically '
-      . 'download the required files, but that also failed.  You may retry '
-      . 'the download by re-enabling the <a href="!module">Mail MIME</a> '
-      . 'module.  If your hosting provider has disabled the '
-      . '<a href="!include_path"><code>set_include_path</code></a> '
-      . 'directive, the files must be manually installed.', $args
-    ) : t(
-      'If installed, the <a href="!include">Include</a> module can attempt '
-      . 'to automatically download the required files for you.', $args
-    )
-  ) . '</p><p>' . t(
-    'The <a href="!module">Mail MIME</a> module has been disabled to avoid '
-    . 'further errors. Please download and install the '
-    . '<a href="!package">Mail_Mime</a> package, then then visit your '
-    . '<a href="!modules">Modules</a> page to re-enable the '
-    . '<a href="!module">Mail MIME</a> module.', $args
-  ) . '</p>';
-  watchdog('mailmime', $message, NULL, WATCHDOG_EMERG);
-  drupal_set_message($message, 'error');
+  drupal_set_message(
+    t('The required <a href="!pear">PEAR</a> package <a href="!package">Mail_Mime</a> could not be found. The <a href="!module">Mail MIME</a> module has been disabled to avoid further errors. Please download and install the <a href="!package">Mail_Mime</a> package, then then visit your <a href="!modules">Modules</a> page to re-enable the <a href="!module">Mail MIME</a> module.',
+      $args), 'error'
+  );
+  if (module_exists('include')) {
+    drupal_set_message(
+      t('The <a href="!include">Include</a> module tried to automatically download the required files, but the attempt failed. You may retry the download by re-enabling the <a href="!module">Mail MIME</a> module.  If your hosting provider has disabled the <a href="!include_path"><code>set_include_path</code></a> directive, the files must be manually installed.',
+        $args), 'error'
+    );
+  }
+  else {
+    drupal_set_message(
+      t('If installed, the <a href="!include">Include</a> module can attempt to automatically download the required files for you.',
+        $args), 'status'
+    );
+  }
+  watchdog('mailmime',
+    'The <a href="!module">Mail MIME</a> module has disabled itself.',
+    $args, WATCHDOG_CRITICAL
+  );
 }
 
 /**
