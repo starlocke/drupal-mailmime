@@ -23,15 +23,19 @@ function mailmime_init() {
   // Requirements check failed; disable module and issue an error message.
   module_disable(array('mailmime'));
   $args = array(
-    '!include' => url('http://drupal.org/project/include'),
+    '!include' => url('admin/modules',
+      array('fragment' => 'edit-modules-other-include-enable')
+    ),
     '!include_path' => url('http://php.net/set_include_path'),
-    '!module' => url('http://drupal.org/project/mailmime'),
-    '!modules' => url('admin/build/modules'),
+    '!module' => url('admin/modules',
+      array('fragment' => 'edit-modules-mail-mailmime-enable')
+    ),
+    '!modules' => url('admin/modules'),
     '!package' => url('http://pear.php.net/package/Mail_Mime'),
     '!pear' => url('http://pear.php.net'),
   );
   drupal_set_message(
-    t('The required <a href="!pear">PEAR</a> package <a href="!package">Mail_Mime</a> could not be found. The <a href="!module">Mail MIME</a> module has been disabled to avoid further errors. Please download and install the <a href="!package">Mail_Mime</a> package, then then visit your <a href="!modules">Modules</a> page to re-enable the <a href="!module">Mail MIME</a> module.',
+    t('The required <a href="!pear">PEAR</a> package <a href="!package">Mail_Mime</a> could not be found. The <a href="!module">Mail MIME</a> module has been disabled to avoid further errors. Please download and install the <a href="!package">Mail_Mime</a> package, then visit your <a href="!modules">Modules</a> page to re-enable the <a href="!module">Mail MIME</a> module.',
       $args), 'error'
   );
   if (module_exists('include')) {
