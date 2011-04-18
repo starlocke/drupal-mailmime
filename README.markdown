@@ -36,7 +36,8 @@ module for two reasons:
 Either:
 
 :   *   The [PEAR](http://pear.php.net/) package called
-        [Mail_Mime](http://pear.php.net/package/Mail_Mime) must be installed and
+        [Mail_Mime](http://pear.php.net/package/Mail_Mime)
+        *(version 1.6.1 or later)* must be installed and
         available somewhere on the
         [`include_path`](http://php.net/manual/ini.core.php#ini.include-path).
 

@@ -27,8 +27,9 @@
 
    Either:
 
-          + The [13]PEAR package called [14]Mail_Mime must be installed
-            and available somewhere on the [15]include_path.
+          + The [13]PEAR package called [14]Mail_Mime (version 1.6.1 or
+            later) must be installed and available somewhere on the
+            [15]include_path.
 
    Or:
 
