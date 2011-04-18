@@ -9,11 +9,11 @@
                 or [3]Mime Mail (which comes with its own MIME-handling
                 library).
 
-   [4]Mail Mime extends the [5]PEAR class called [6]Mail_Mime to provide a
-   drupal-friendly library for creating and parsing MIME messages. Neither
-   [7]Mail Mime nor [8]Mail_Mime send mail nor do anything useful on their
-   own. Both are intended as code libraries to be used by other programs
-   that send or receive mail.
+   [4]Mail Mime extends the [5]PEAR class called [6]Mail_Mime (version
+   1.6.1 or later) to provide a drupal-friendly library for creating and
+   parsing MIME messages. Neither [7]Mail Mime nor [8]Mail_Mime send mail
+   nor do anything useful on their own. Both are intended as code
+   libraries to be used by other programs that send or receive mail.
 
    [9]Mail Mime started out as part of [10]HTML Mail. I separated into its
    own module for two reasons:

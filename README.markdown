@@ -12,7 +12,8 @@ Provides a class for creating MIME messages.
 
 [Mail Mime](http://drupal.org/project/mailmime) extends the
 [PEAR](http://pear.php.net/) class called
-[Mail_Mime](http://pear.php.net/package/Mail_Mime) to provide a
+[Mail_Mime](http://pear.php.net/package/Mail_Mime)
+*(version 1.6.1 or later)* to provide a
 drupal-friendly library for creating and parsing MIME messages.  Neither
 [Mail Mime](http://drupal.org/project/mailmime) nor
 [Mail_Mime](http://pear.php.net/package/Mail_Mime) send mail nor do anything
