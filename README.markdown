@@ -33,19 +33,24 @@ module for two reasons:
 
 ## [Requirement](http://www.dict.org/bin/Dict?Form=Dict2&Database=*&Query=requirement)
 
-Either:
+The following files, available from [PEAR](http://pear.php.net/), must be
+installed and available somewhere on the
+[`include_path`](http://php.net/manual/ini.core.php#ini.include-path).
 
-:   *   The [PEAR](http://pear.php.net/) package called
-        [Mail_Mime](http://pear.php.net/package/Mail_Mime)
-        *(version 1.6.1 or later)* must be installed and
-        available somewhere on the
-        [`include_path`](http://php.net/manual/ini.core.php#ini.include-path).
+    *    `Mail/mime.php`
+    *    `Mail/mimeDecode.php`
+    *    `Mail/mimePart.php`
+    *    `PEAR.php`
+    *    `PEAR5.php`
 
-Or:
+One way to satisfy this requirement is to run the following command from a Unix
+root shell prompt:
 
-:   *   If the [Mail_Mime](http://pear.php.net/package/Mail_Mime) is not
-        available, the [Include](http://drupal.org/project/include) module
-        can automatically download and enable the required files.
+    pear install -a Mail_Mime
+
+Another way is to install and enable the
+[Include](http://drupal.org/project/include) module before enabling the
+[Mail MIME](http://drupal.org/project/mailmime) module.
 
 ## [Installation](http://drupal.org/documentation/install/modules-themes/modules-5-6)
 
