@@ -27,12 +27,11 @@
 
    The following files, available from [13]PEAR, must be installed and
    available somewhere on the [14]include_path.
-*    `Mail/mime.php`
-*    `Mail/mimeDecode.php`
-*    `Mail/mimePart.php`
-*    `PEAR.php`
-*    `PEAR5.php`
-
+     * Mail/mime.php
+     * Mail/mimeDecode.php
+     * Mail/mimePart.php
+     * PEAR.php
+     * PEAR5.php
 
    One way to satisfy this requirement is to run the following command
    from a Unix root shell prompt:
