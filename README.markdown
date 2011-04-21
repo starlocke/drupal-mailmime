@@ -37,11 +37,11 @@ The following files, available from [PEAR](http://pear.php.net/), must be
 installed and available somewhere on the
 [`include_path`](http://php.net/manual/ini.core.php#ini.include-path).
 
-    *    `Mail/mime.php`
-    *    `Mail/mimeDecode.php`
-    *    `Mail/mimePart.php`
-    *    `PEAR.php`
-    *    `PEAR5.php`
+*    `Mail/mime.php`
+*    `Mail/mimeDecode.php`
+*    `Mail/mimePart.php`
+*    `PEAR.php`
+*    `PEAR5.php`
 
 One way to satisfy this requirement is to run the following command from a Unix
 root shell prompt:
