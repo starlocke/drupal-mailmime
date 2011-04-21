@@ -182,7 +182,7 @@ class MailMIME extends Mail_mime {
    *   TRUE if successful; otherwise FALSE.
    */
   public function setTXTBody($data, $is_file = FALSE, $append = FALSE) {
-    return MailMIME::successful(parent::setTXTBody($data, $is_file, $append));
+    return self::successful(parent::setTXTBody($data, $is_file, $append));
   }
 
   /**
@@ -205,7 +205,7 @@ class MailMIME extends Mail_mime {
    *   TRUE if successful; otherwise FALSE.
    */
   public function setHTMLBody($data, $is_file = FALSE) {
-    return MailMIME::successful(parent::setHTMLBody($data, $is_file));
+    return self::successful(parent::setHTMLBody($data, $is_file));
   }
 
   /**
@@ -247,7 +247,7 @@ class MailMIME extends Mail_mime {
     if (!isset($this->cids[$content_id])) {
       // @todo set $content_type with mimedetect if possible.
       $this->cids[$content_id] =
-        MailMIME::successful(
+        self::successful(
           parent::addHTMLImage($file, $content_type, $name, $is_file, $content_id)
         );
     }
@@ -306,7 +306,7 @@ class MailMIME extends Mail_mime {
     $language = '', $location = '', $name_encoding = NULL,
     $filename_encoding = NULL, $description = '', $header_encoding = NULL) {
     // @todo Set content_type with mimedetect if possible.
-    return MailMIME::successful(
+    return self::successful(
       parent::addAttachment($file, $content_type, $name, $is_file, $encoding,
         $disposition, $charset, $language, $locatoin, $name_encoding,
         $filename_encoding, $description, $header_encoding)
@@ -322,7 +322,7 @@ class MailMIME extends Mail_mime {
    *   (optional) Build parameters for the MailMimeInterface::get() method.
    * @param $headers
    *   (optional) The extra headers that should be passed to the
-   *   MailMIME::headers() method.
+   *   self::headers() method.
    * @param $overwrite
    *   TRUE if $headers parameter should overwrite previous data.
    *
@@ -331,7 +331,7 @@ class MailMIME extends Mail_mime {
    */
   public function getMessage($separation = NULL, $params = NULL,
     $headers = NULL, $overwrite = FALSE) {
-    return MailMIME::successful(
+    return self::successful(
       parent::getMessage($separation, $params, $headers, $overwrite)
     );
   }
@@ -354,7 +354,7 @@ class MailMIME extends Mail_mime {
    */
   public function saveMessage($filename, $params = NULL, $headers = NULL,
     $overwrite = FALSE) {
-    return MailMIME::successful(
+    return self::successful(
       parent::saveMessage($filename, $params, $headers, $overwrite)
     );
   }
@@ -371,7 +371,7 @@ class MailMIME extends Mail_mime {
    *   TRUE if successful; otherwise FALSE.
    */
   public function saveMessageBody($filename, $params = NULL) {
-    return MailMIME::successful(
+    return self::successful(
       parent::saveMessageBody($filename, $params)
     );
   }
@@ -425,7 +425,7 @@ class MailMIME extends Mail_mime {
         $this->_htmlbody
       );
     }
-    return MailMIME::successful(
+    return self::successful(
       parent::get($params, $filename, $skip_head)
     );
   }
@@ -608,11 +608,11 @@ class MailMIME extends Mail_mime {
         'rfc822_bodies' => TRUE,
       )
     );
-    if (!MailMIME::successful($decoded)) {
+    if (!self::successful($decoded)) {
       return FALSE;
     }
     $parsed = new MailMIME();
-    MailMIME::parseDecoded($parsed, $decoded);
+    self::parseDecoded($parsed, $decoded);
     return $parsed;
   }
 
@@ -630,7 +630,7 @@ class MailMIME extends Mail_mime {
    *   encoded message body, both ready to send.
    */
   public function toEmail($headers) {
-    $headers = MailMIME::toHeaders($headers);
+    $headers = self::toHeaders($headers);
     $mime_headers = $this->headers();
     return array(
       array_diff_key($headers, $mime_headers) + $mime_headers,
@@ -659,7 +659,7 @@ class MailMIME extends Mail_mime {
     if ($decoded->ctype_primary == 'multipart') {
       if (!empty($decoded->parts)) {
         foreach (array_keys($decoded->parts) as $key) {
-          parseDecoded($parsed, $decoded->parts[$key], $decoded->ctype_secondary);
+          self::parseDecoded($parsed, $decoded->parts[$key], $decoded->ctype_secondary);
         }
       }
       return;
@@ -773,14 +773,14 @@ class MailMIME extends Mail_mime {
    */
   public static function encodeEmail($headers, $body) {
     // Standardize capitalization of header names.
-    $headers = MailMIME::toHeaders($headers);
+    $headers = self::toHeaders($headers);
     $output = '';
     foreach ($headers as $name => $value) {
       $output .= $name . ': ' . Mail_mimePart::encodeHeader(
         $name, $value, 'UTF-8', 'quoted-printable', MAIL_MIME_CRLF
       ) . MAIL_MIME_CRLF;
     }
-    $output .= MAIL_MIME_CRLF . MailMIME::concat($body);
+    $output .= MAIL_MIME_CRLF . self::concat($body);
     return $output;
   }
 }
