@@ -19,20 +19,21 @@
   </li>
 </ol>
 <h2><a href="http://www.dict.org/bin/Dict?Form=Dict2&amp;Database=*&amp;Query=requirement">Requirement</a></h2>
-<dl>
-  <dt>Either:</dt>
-  <dd>
-    <ul>
-      <li>The <a href="http://pear.php.net/">PEAR</a> package called <a href="http://pear.php.net/package/Mail_Mime">Mail_Mime</a> <em>(version 1.6.1 or later)</em> must be installed and available somewhere on the <a href="http://php.net/manual/ini.core.php#ini.include-path"><code>include_path</code></a>.</li>
-    </ul>
-  </dd>
-  <dt>Or:</dt>
-  <dd>
-    <ul>
-      <li>If the <a href="http://pear.php.net/package/Mail_Mime">Mail_Mime</a> is not available, the <a href="http://drupal.org/project/include">Include</a> module can automatically download and enable the required files.</li>
-    </ul>
-  </dd>
-</dl>
+<p>The following files, available from <a href="http://pear.php.net/">PEAR</a>, must be installed and available somewhere on the <a href="http://php.net/manual/ini.core.php#ini.include-path"><code>include_path</code></a>.</p>
+<pre>
+<code>*    `Mail/mime.php`
+*    `Mail/mimeDecode.php`
+*    `Mail/mimePart.php`
+*    `PEAR.php`
+*    `PEAR5.php`
+</code>
+</pre>
+<p>One way to satisfy this requirement is to run the following command from a Unix root shell prompt:</p>
+<pre>
+<code>pear install -a Mail_Mime
+</code>
+</pre>
+<p>Another way is to install and enable the <a href="http://drupal.org/project/include">Include</a> module before enabling the <a href="http://drupal.org/project/mailmime">Mail MIME</a> module.</p>
 <h2><a href="http://drupal.org/documentation/install/modules-themes/modules-5-6">Installation</a></h2>
 <ol style="list-style-type: decimal;">
   <li>
