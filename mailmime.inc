@@ -418,8 +418,8 @@ class MailMIME extends Mail_mime {
     if (isset($this->_htmlbody)) {
       $this->_htmlbody = preg_replace_callback(
         array(
-          '#(?<!\S)(src|background|href)\s*(=)\s*(["\'])(?!cid:)(.*?)(\3)(?=[ >])#i',
-          '#(?<!\S)(url)\s*(\()\s*(["\'])(?!cid:)(.*?)(\3)(?=[ )])#i',
+          '#(?<!\S)(src|background|href)\s*(=)\s*(["\'])(?!cid:)([^?]*?)(?<!\.css)(?<!\.js)(\?.*?)?(\3)(?=[ >])#i',
+          '#(?<!\S)(url)\s*(\()\s*(["\'])(?!cid:)([^?]*?)(?<!\.css)(?<!\.js)(\?.*?)?(\3)(?=[ )])#i'
         ),
         array(&$this, 'attachRegex'),
         $this->_htmlbody
