@@ -52,6 +52,16 @@ pear install -a Mail_Mime
           + If all of the above fails, [23]Mail Mime will disable itself
             and print a warning to both the screen and the error log.
 
+[24]Troubleshooting
+
+   If you see:
+
+     Fatal error: : Call to undefined method
+     Mail_mimePart::encodeHeader()
+
+   ...then your version of copy of [25]Mail_mimePart is over five years
+   old and needs to be updated.
+
 References
 
    1. http://drupal.org/project/mailmime
@@ -77,3 +87,5 @@ References
   21. http://drupal.org/project/mailmime
   22. http://drupal.org/project/include
   23. http://drupal.org/project/mailmime
+  24. http://drupal.org/project/issues/mailmime
+  25. http://pear.php.net/package/Mail_Mime/docs/1.6.1/Mail_Mime/Mail_mimePart.html
