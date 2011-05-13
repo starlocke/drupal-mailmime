@@ -3,7 +3,6 @@
 /**
  * @file
  * Ensures that required files are available.
- * ..Test...
  */
 
 /**
@@ -69,6 +68,7 @@ function mailmime_check_requirements() {
     && class_exists('Mail_mimeDecode')
     && class_exists('Mail_mimePart')
   ) {
+    // Check for encodeHeader() function, introduced in version 1.6.1
     if (!method_exists('Mail_mimePart', 'encodeHeader')) {
       drupal_set_message(
         t('Your version of <a href="@mimepart">!mimepart</a> is too old.  Please update to version 1.6.1 or later.',
