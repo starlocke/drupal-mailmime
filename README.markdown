@@ -70,12 +70,3 @@ Another way is to install and enable the
     *   If all of the above fails,
         [Mail Mime](http://drupal.org/project/mailmime) will disable itself
         and print a warning to both the screen and the error log.
-
-## [Troubleshooting](http://drupal.org/project/issues/mailmime)
-
-If you see:
-
->    Fatal error:
-     :    Call to undefined method `Mail_mimePart::encodeHeader()`
-
-...then your version of copy of <a href="http://pear.php.net/package/Mail_Mime/docs/1.6.1/Mail_Mime/Mail_mimePart.html">Mail_mimePart</a> is over five years old and needs to be updated.
