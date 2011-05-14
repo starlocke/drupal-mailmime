@@ -74,7 +74,7 @@ function mailmime_check_requirements() {
           array(
             '@mimepart' => 'http://pear.php.net/package/Mail_Mime/docs/1.6.1/Mail_Mime/Mail_mimePart.html',
             '!mimepart' => 'Mail_mimePart',
-          ),
+          )
         ),
         'error'
       );
