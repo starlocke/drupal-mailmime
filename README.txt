@@ -1,4 +1,4 @@
-                                  [1]Mail MIME
+[1]Mail MIME
 
    Provides a class for creating MIME messages.
      *
@@ -23,7 +23,7 @@
     2. It is possible that another mail-sending or mail-reading module may
        find the [11]Mail Mime library useful.
 
-[12]Requirement
+  [12]Requirement
 
    The following files, available from [13]PEAR, must be installed and
    available somewhere on the [14]include_path.
@@ -41,7 +41,7 @@ pear install -a Mail_Mime
    Another way is to install and enable the [15]Include module before
    enabling the [16]Mail MIME module.
 
-[17]Installation
+  [17]Installation
 
     1. Download and install [18]as usual.
     2. When enabled, [19]Mail Mime will

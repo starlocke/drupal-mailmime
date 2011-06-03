@@ -1,4 +1,4 @@
-# [Mail MIME](http://drupal.org/project/mailmime)
+## [Mail MIME](http://drupal.org/project/mailmime)
 
 Provides a class for creating MIME messages.
 
@@ -31,7 +31,7 @@ module for two reasons:
 2.  It is possible that another mail-sending or mail-reading module may find the
     [Mail Mime](http://drupal.org/project/mailmime) library useful.
 
-## [Requirement](http://www.dict.org/bin/Dict?Form=Dict2&Database=*&Query=requirement)
+### [Requirement](http://www.dict.org/bin/Dict?Form=Dict2&Database=*&Query=requirement)
 
 The following files, available from [PEAR](http://pear.php.net/), must be
 installed and available somewhere on the
@@ -52,7 +52,7 @@ Another way is to install and enable the
 [Include](http://drupal.org/project/include) module before enabling the
 [Mail MIME](http://drupal.org/project/mailmime) module.
 
-## [Installation](http://drupal.org/documentation/install/modules-themes/modules-5-6)
+### [Installation](http://drupal.org/documentation/install/modules-themes/modules-5-6)
 
 1.  Download and install
     [as usual](http://drupal.org/documentation/install/modules-themes/modules-5-6).
