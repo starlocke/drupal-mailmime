@@ -32,8 +32,8 @@
      * Mail/mimePart.php
      * PEAR.php
      * PEAR5.php
-     * One way to satisfy the [requirements][requirements] is to run the
-       following command from a Unix root shell prompt:
+     * One way to satisfy the requirements is to run the following command
+       from a Unix root shell prompt:
        pear install -a Mail_Mime
        The -a parameter ensures that dependencies, including
        Mail/mimeDecode.php and Mail/mimePart.php, are also installed.

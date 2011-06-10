@@ -41,7 +41,7 @@ installed and available somewhere on the
 *    `PEAR.php`
 *    `PEAR5.php`
 
-1.   One way to satisfy the [requirements][requirements] is to run the following
+1.   One way to satisfy the requirements is to run the following
      command from a Unix root shell prompt:
 
      `pear install -a Mail_Mime`
