@@ -1,4 +1,4 @@
-# [Mail MIME](http://drupal.org/project/mailmime)
+## [Mail MIME](http://drupal.org/project/mailmime)
 
 Provides a class for creating MIME messages.
 
@@ -10,14 +10,12 @@ Provides a class for creating MIME messages.
         [Mime Mail](http://drupal.org/project/mimemail) (which comes with its
         own MIME-handling library).
 
-[Mail Mime](http://drupal.org/project/mailmime) extends the
-[PEAR](http://pear.php.net/) class called
-[Mail_Mime](http://pear.php.net/package/Mail_Mime)
-*(version 1.6.1 or later)* to provide a
+[Mail Mime](http://drupal.org/project/mailmime) extends certain
+[PEAR](http://pear.php.net/) mail-handling classes to provide a
 drupal-friendly library for creating and parsing MIME messages.  Neither
-[Mail Mime](http://drupal.org/project/mailmime) nor
-[Mail_Mime](http://pear.php.net/package/Mail_Mime) send mail nor do anything
-useful on their own.  Both are intended as code libraries to be used by *other*
+[Mail Mime](http://drupal.org/project/mailmime) nor the original
+[PEAR](http://pear.php.net/) classes send mail nor do anything
+useful on their own.  They are intended as code libraries to be used by *other*
 programs that send or receive mail.
 
 [Mail Mime](http://drupal.org/project/mailmime) started out as part of
@@ -31,7 +29,7 @@ module for two reasons:
 2.  It is possible that another mail-sending or mail-reading module may find the
     [Mail Mime](http://drupal.org/project/mailmime) library useful.
 
-## [Requirement](http://www.dict.org/bin/Dict?Form=Dict2&Database=*&Query=requirement)
+### <a id="requirements">Requirements</a>
 
 The following files, available from [PEAR](http://pear.php.net/), must be
 installed and available somewhere on the
@@ -43,16 +41,19 @@ installed and available somewhere on the
 *    `PEAR.php`
 *    `PEAR5.php`
 
-One way to satisfy this requirement is to run the following command from a Unix
-root shell prompt:
+1.   One way to satisfy the [requirements][requirements] is to run the following
+     command from a Unix root shell prompt:
 
-    pear install -a Mail_Mime
+     `pear install -a Mail_Mime`
 
-Another way is to install and enable the
-[Include](http://drupal.org/project/include) module before enabling the
-[Mail MIME](http://drupal.org/project/mailmime) module.
+     The `-a` parameter ensures that dependencies, including
+     `Mail/mimeDecode.php` and `Mail/mimePart.php`, are also installed.
 
-## [Installation](http://drupal.org/documentation/install/modules-themes/modules-5-6)
+2.   Another way is to install and enable the
+     [Include](http://drupal.org/project/include) module before enabling the
+     [Mail MIME](http://drupal.org/project/mailmime) module.
+
+### [Installation](http://drupal.org/documentation/install/modules-themes/modules-5-6)
 
 1.  Download and install
     [as usual](http://drupal.org/documentation/install/modules-themes/modules-5-6).

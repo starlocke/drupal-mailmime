@@ -31,11 +31,15 @@ function mailmime_init() {
       array('fragment' => 'edit-modules-mail-mailmime-enable')
     ),
     '!modules' => url('admin/modules'),
-    '!package' => url('http://pear.php.net/package/Mail_Mime'),
+    '!mime' => url('http://pear.php.net/package/Mail_Mime'),
+    '!mimedecode' => url('http://pear.php.net/package/Mail_mimeDecode'),
+    '!mimepart' => url('http://pear.php.net/manual/package.mail.mail-mimepart.mail-mimepart.php'),
     '!pear' => url('http://pear.php.net'),
+    '!pearerror' => url('http://pear.php.net/manual/core.pear.pear-error.pear-error.php'),
+    '!readme' => url(drupal_get_path('module', 'mailmime') . '/README.html', array('fragment' => 'requirements')),
   );
   drupal_set_message(
-    t('The required <a href="!pear">PEAR</a> package <a href="!package">Mail_Mime</a> could not be found. The <a href="!module">Mail MIME</a> module has been disabled to avoid further errors. Please download and install the <a href="!package">Mail_Mime</a> package, then visit your <a href="!modules">Modules</a> page to re-enable the <a href="!module">Mail MIME</a> module.',
+    t('One or more of the required <a href="!pear">PEAR</a> classes could not be loaded:<ul><li><a href="!mime">Mail_Mime</a></li><li><a href="!mimedecode">Mail_mimeDecode</a></li><li><a href="!mimepart">Mail_mimePart</a></li><li><a href="!pearerror">PEAR_Error</a></li></ul> The <a href="!module">Mail MIME</a> module has been disabled to avoid further errors. Please satisfy the module requirements listed in the <a href="!readme">documentation</a>, then visit your <a href="!modules">Modules</a> page to re-enable the <a href="!module">Mail MIME</a> module.',
       $args), 'error'
   );
   if (module_exists('include')) {
@@ -52,7 +56,7 @@ function mailmime_init() {
   }
   watchdog('mailmime',
     'The <a href="!module">Mail MIME</a> module has disabled itself.',
-    $args, WATCHDOG_CRITICAL
+    $args, LOG_CRITICAL
   );
 }
 
