@@ -241,17 +241,69 @@ class MailMIME extends Mail_mime {
     $is_file = TRUE,
     $content_id = NULL
   ) {
+    $filename = $is_file ? $file : $name;
     if (empty($content_id)) {
-      $content_id = md5($is_file ? $file : $name);
+      $content_id = md5($filename);
+    }
+    if (empty($content_type)) {
+      $content_type = $self::guess_mimetype($filename, $is_file ? NULL : $file);
     }
     if (!isset($this->cids[$content_id])) {
-      // @todo set $content_type with mimedetect if possible.
       $this->cids[$content_id] =
         self::successful(
           parent::addHTMLImage($file, $content_type, $name, $is_file, $content_id)
         );
     }
     return $this->cids[$content_id];
+  }
+
+  /**
+   * Guess the content type of a file or inline data stream.
+   *
+   * Uses the Mime Detect module if available; otherwise uses the
+   * file_get_mimetype() function.  Provides a smaller-than-default
+   * mime-type mapping to improve performance a bit.
+   *
+   * @param $filename
+   *   The name of the file, used for guessing the mime type based on the
+   *   filename extension.
+   * @param $data
+   *   (optional) The contents of the file, used by the Mime Detect module if it
+   *   is available.  If omitted or blank, the Mime Detect module will try to
+   *   open the file referenced by the $filename parameter.
+   *
+   * @return
+   *   The MIME content-type matching the file contents or filename extension,
+   *   or "application/octet-stream" if no match could be found.
+   */
+  static function guess_mimetype($filename, $data = NULL) {
+    static $mapping;
+    // @todo: Use Mime Detect module if available.
+    if (!isset($mapping)) {
+      $mapping = array(
+        'pdf' => 'application/pdf',
+        'ps|ai|eps' => 'application/postscript',
+        'km(l|z)' => 'application/vnd.google-earth',
+        'pp(a|s|t)(m|x|)' => 'application/vnd.ms-powerpoint',
+        'swf(l|)' => 'application/x-shockwave-flash',
+        'gif' => 'image/gif',
+        'jp(e|eg|g)' => 'image/jpeg',
+        'pcx' => 'image/pcx',
+        'png' => 'image/png',
+        'svg(z|)' => 'image/svg+xml',
+        'tif(f|)' => 'image/tiff',
+        'wbmp' => 'image/vnd.wap.wbmp',
+        'ico' => 'image/x-icon',
+        'art' => 'image/x-jg',
+        'bmp' => 'image/x-ms-bmp',
+        'eml' => 'message/rfc822',
+        'ics|icz' => 'text/calendar',
+        'css' => 'text/css',
+        'vrm(l|)|wrl' => 'x-world/x-vrml',
+      );
+      $mapping = variable_get('mime_extension_mapping', $mapping);
+    }
+    return file_get_mimetype($filename, $mapping);
   }
 
   /**
