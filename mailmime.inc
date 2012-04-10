@@ -360,7 +360,7 @@ class MailMIME extends Mail_mime {
     // @todo Set content_type with mimedetect if possible.
     return self::successful(
       parent::addAttachment($file, $content_type, $name, $is_file, $encoding,
-        $disposition, $charset, $language, $locatoin, $name_encoding,
+        $disposition, $charset, $language, $location, $name_encoding,
         $filename_encoding, $description, $header_encoding)
     );
   }
