@@ -246,7 +246,7 @@ class MailMIME extends Mail_mime {
       $content_id = md5($filename);
     }
     if (empty($content_type)) {
-      $content_type = $self::guess_mimetype($filename, $is_file ? NULL : $file);
+      $content_type = self::guess_mimetype($filename, $is_file ? NULL : $file);
     }
     if (!isset($this->cids[$content_id])) {
       $this->cids[$content_id] =
