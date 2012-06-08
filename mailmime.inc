@@ -434,7 +434,7 @@ class MailMIME extends Mail_mime {
    * @see get()
    */
   protected function attachRegex($matches) {
-    if ( ($url = drupal_strip_dangerous_protocols($matches[4]))
+    if ( ($url = drupal_strip_dangerous_protocols(urldecode($matches[4])))
       && ($path = url_to_realpath($url))
       && is_file($path)
       && $this->addHTMLImage($path)
