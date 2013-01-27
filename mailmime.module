@@ -97,20 +97,26 @@ function mailmime_check_requirements() {
  * Attempts to use the Include module to download required files.
  */
 function mailmime_download_requirements() {
-  $svn = 'http://svn.php.net/repository/pear/';
   $packages = array(
     'Mail_mime' => array(
       'local_path' => 'Mail/',
-      'remote_path' => 'packages/Mail_Mime/trunk/',
+      'remote_path' => 'https://raw.github.com/pear/Mail_Mime/master/Mail/',
       'files' => array(
         'mime.php',
         'mimeDecode.php',
         'mimePart.php',
       ),
     ),
+    'Mail_mimeDecode' => array(
+      'local_path' => 'Mail/',
+      'remote_path' => 'http://svn.php.net/repository/pear/packages/Mail_mimeDecode/trunk/Mail/',
+      'files' => array(
+        'mimeDecode.php',
+      ),
+    ),
     'PEAR' => array(
       'local_path' => '',
-      'remote_path' => 'pear-core/trunk/',
+      'remote_path' => 'https://raw.github.com/pear/pear-core/master/',
       'files' => array(
         'PEAR.php',
         'PEAR5.php',
@@ -121,7 +127,7 @@ function mailmime_download_requirements() {
     $dst = $package['local_path'];
     $src = $package['remote_path'];
     foreach ($package['files'] as $file) {
-      if (!include_check_path("$dst$file", "$svn$src$file", 'url')) {
+      if (!include_check_path("$dst$file", "$src$file", 'url')) {
         return FALSE;
       }
     }
