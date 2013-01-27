@@ -35,8 +35,9 @@
      * One way to satisfy the requirements is to run the following command
        from a Unix root shell prompt:
        pear install -a Mail_Mime
+       pear install Mail_mimeDecode
        The -a parameter ensures that dependencies, including
-       Mail/mimeDecode.php and Mail/mimePart.php, are also installed.
+       Mail/mimePart.php, are also installed.
      * Another way is to install and enable the [13]Include module before
        enabling the [14]Mail MIME module.
 
