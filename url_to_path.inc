@@ -122,7 +122,7 @@ function url_to_path($url) {
 function url_to_realpath($url) {
   $path = url_to_path($url);
   if ($path) {
-    return realpath(DRUPAL_ROOT . base_path() . $path);
+    return realpath(DRUPAL_ROOT . DIRECTORY_SEPARATOR . $path);
   }
   return FALSE;
 }
